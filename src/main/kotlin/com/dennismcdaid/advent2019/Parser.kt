@@ -4,9 +4,13 @@ import java.io.File
 
 object Parser {
 
-  fun readLines(fileName: String): List<String> {
+  private fun getFile(fileName: String): File {
     val url = javaClass.classLoader.getResource(fileName)
       ?: throw IllegalStateException("Failed to open $fileName")
-    return File(url.toURI()).readLines()
+    return File(url.toURI())
   }
+
+  fun readLines(fileName: String): List<String> = getFile(fileName).readLines()
+
+  fun read(fileName: String): String = getFile(fileName).readText()
 }
