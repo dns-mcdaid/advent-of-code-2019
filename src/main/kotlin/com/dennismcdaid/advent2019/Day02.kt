@@ -38,4 +38,25 @@ object Day02 {
 
   fun firstRegisterAfterMutation(array: IntArray) : Int =
     mutateUntilHalt(array).first()
+
+  fun getNounVerbMutated(source: IntArray, searchValue: Int) : Int {
+    val (noun, verb) = determineNounAndVerb(source, searchValue)
+    return 100 * noun + verb
+  }
+
+
+  private fun determineNounAndVerb(source: IntArray, searchValue: Int) : Pair<Int, Int> {
+    for (noun in 0..99) {
+      for (verb in 0..99) {
+        val arrayForRun = IntArray(source.size)
+        source.copyInto(arrayForRun)
+        arrayForRun[1] = noun
+        arrayForRun[2] = verb
+        if (firstRegisterAfterMutation(arrayForRun) == searchValue) {
+          return Pair(noun, verb)
+        }
+      }
+    }
+    throw IllegalStateException("Couldn't find any matches for $searchValue")
+  }
 }
