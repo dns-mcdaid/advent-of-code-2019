@@ -58,25 +58,32 @@ class Day03Test {
     }
 
     @Test
-    fun `Shortest Manhattan is determined from list of intersections`() {
-      val crossovers = listOf(
-        Intersection(6, 6),
-        Intersection(3, 3)
-      )
-
-      assertThat(Day03.shortestManhattan(crossovers)).isEqualTo(6)
-    }
-
-    @Test
     fun `Examples pass`() {
-      assertThat(Day03.execute(example0)).isEqualTo(6)
-      assertThat(Day03.execute(example1)).isEqualTo(159)
-      assertThat(Day03.execute(example2)).isEqualTo(135)
+      assertThat(Day03.execute01(example0)).isEqualTo(6)
+      assertThat(Day03.execute01(example1)).isEqualTo(159)
+      assertThat(Day03.execute01(example2)).isEqualTo(135)
     }
 
     @Test
     fun `Input generates expected result`() {
-      assertThat(Day03.execute(input)).isEqualTo(293)
+      assertThat(Day03.execute01(input)).isEqualTo(293)
+    }
+  }
+
+  @Nested
+  @DisplayName("Part 2")
+  inner class Part2 {
+
+    @Test
+    fun `Examples find fewest steps intersection`() {
+      assertThat(Day03.execute02(example0)).isEqualTo(30)
+      assertThat(Day03.execute02(example1)).isEqualTo(610)
+      assertThat(Day03.execute02(example2)).isEqualTo(410)
+    }
+
+    @Test
+    fun `Input generates expected result`() {
+      assertThat(Day03.execute02(input)).isEqualTo(27306)
     }
   }
 }
