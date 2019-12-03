@@ -25,19 +25,22 @@ interface Collector {
 }
 
 private data class Intersection(
-  val x: Int,
-  val y: Int,
+  val point: Point,
   val step: Int = 0
 ) : Comparable<Intersection> {
+
+  val x = point.x
+  val y = point.y
+
   fun jump(direction: Direction, steps: Int): Intersection {
-    val (x, y) = when (direction) {
-      Direction.UP -> Pair(x, y + steps)
-      Direction.DOWN -> Pair(x, y - steps)
-      Direction.LEFT -> Pair(x - steps, y)
-      Direction.RIGHT -> Pair(x + steps, y)
+    val newPoint = when (direction) {
+      Direction.UP -> point.upBy(steps)
+      Direction.DOWN -> point.downBy(steps)
+      Direction.LEFT -> point.leftBy(steps)
+      Direction.RIGHT -> point.rightBy(steps)
     }
 
-    return Intersection(x, y, step + steps)
+    return Intersection(newPoint, step + steps)
   }
 
   override fun compareTo(other: Intersection): Int {
@@ -54,10 +57,10 @@ private class Matrix : MutableMap<Int, SortedSet<Intersection>> by mutableMapOf(
     stepCounter--
     for (x in xRange) {
       this[x]?.addAll(yRange.map {
-        Intersection(x, it, stepCounter++)
+        Intersection(Point(x, it), stepCounter++)
       }) ?: run {
         this[x] = (yRange).map {
-          Intersection(x, it, stepCounter++)
+          Intersection(Point(x, it), stepCounter++)
         }.toSortedSet()
       }
     }
@@ -79,7 +82,7 @@ private class Sweeper(
         initialMatrix[x]?.filter {
           it.y == y
         }?.forEach {
-          add(Intersection(x, y, it.step + stepCounter))
+          add(Intersection(Point(x, y), it.step + stepCounter))
         }
         stepCounter++
       }
@@ -108,7 +111,7 @@ object Day03 {
   private fun <T : Collector> traverse(commands: List<String>, collector: T): T {
     return commands.map(this::parseCommand)
       .fold(
-        Intersection(0, 0, 0)
+        Intersection(Point(0, 0), 0)
       ) { previous,
           (direction, steps) ->
         return@fold previous.jump(direction, steps).also {
@@ -128,7 +131,7 @@ object Day03 {
     traverse(commands, Sweeper(initialMatrix))
 
   fun execute01(data: List<String>): Int = execute(data) {
-    it.x.absoluteValue + it.y.absoluteValue
+    it.point.distanceTo(Point.CENTER)
   }
 
   fun execute02(data: List<String>): Int = execute(data, Intersection::step)
