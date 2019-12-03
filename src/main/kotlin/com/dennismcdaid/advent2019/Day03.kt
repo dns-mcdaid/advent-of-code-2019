@@ -17,20 +17,26 @@ enum class Direction(val rawValue: Char) {
 }
 
 interface Collector {
-  fun collect(oldX: Int, newX: Int, oldY: Int, newY: Int)
+  fun collect(
+    xRange: IntRange,
+    yRange: IntRange
+  )
 }
 
+data class Intersection(
+  val x: Int,
+  val y: Int
+)
+
 private class Matrix : MutableMap<Int, SortedSet<Int>> by mutableMapOf(), Collector {
-  override fun collect(oldX: Int, newX: Int, oldY: Int, newY: Int) {
+  override fun collect(
+    xRange: IntRange,
+    yRange: IntRange
+  ) {
 
-    val minX = oldX.coerceAtMost(newX)
-    val maxX = oldX.coerceAtLeast(newX)
-    val minY = oldY.coerceAtMost(newY)
-    val maxY = oldY.coerceAtLeast(newY)
-
-    for (x in minX..maxX) {
-      this[x]?.addAll(minY..maxY) ?: run {
-        this[x] = (minY..maxY).toSortedSet()
+    for (x in xRange) {
+      this[x]?.addAll(yRange) ?: run {
+        this[x] = (yRange).toSortedSet()
       }
     }
   }
@@ -38,26 +44,21 @@ private class Matrix : MutableMap<Int, SortedSet<Int>> by mutableMapOf(), Collec
 
 private class Sweeper(
   private val initialMatrix: Map<Int, SortedSet<Int>>
-) : MutableList<Pair<Int, Int>> by mutableListOf(), Collector {
-  override fun collect(oldX: Int, newX: Int, oldY: Int, newY: Int) {
+) : MutableList<Intersection> by mutableListOf(), Collector {
+  override fun collect(
+    xRange: IntRange,
+    yRange: IntRange
+  ) {
 
-    val minX = oldX.coerceAtMost(newX)
-    val maxX = oldX.coerceAtLeast(newX)
-    val minY = oldY.coerceAtMost(newY)
-    val maxY = oldY.coerceAtLeast(newY)
-
-    (minX..maxX).asSequence()
-      .mapNotNull { x ->
+    xRange.mapNotNull { x ->
         initialMatrix[x]?.let {
           Pair(x, it)
         }
       }
       .forEach { (x, ys) ->
-        (minY..maxY).asSequence()
-          .filter { it in ys }
-          .forEach {
-            add(x to it)
-          }
+        ys.forEach { y ->
+          if (y in yRange) add(Intersection(x, y))
+        }
       }
   }
 }
@@ -73,12 +74,15 @@ object Day03 {
     return Pair(direction, steps)
   }
 
-  fun shortestManhattan(intersections: List<Pair<Int, Int>>): Int {
+  fun shortestManhattan(intersections: List<Intersection>): Int {
     return intersections
-      .map { it.first.absoluteValue + it.second.absoluteValue }
+      .map { it.x.absoluteValue + it.y.absoluteValue }
       .filter { it != 0 }
       .min() ?: throw IllegalStateException("List must be populated")
   }
+
+  private fun minMaxRange(old: Int, new: Int) : IntRange =
+    old.coerceAtMost(new)..old.coerceAtLeast(new)
 
   private fun <T : Collector> traverse(commands: List<String>, collector: T): T {
     return commands.map(this::parseCommand)
@@ -90,7 +94,7 @@ object Day03 {
           Direction.LEFT -> Pair(x - steps, y)
           Direction.RIGHT -> Pair(x + steps, y)
         }.also {
-          collector.collect(x, it.first, y, it.second)
+          collector.collect(minMaxRange(x, it.first), minMaxRange(y, it.second))
         }
       }
       .let { collector }
@@ -102,7 +106,7 @@ object Day03 {
   private fun findIntersections(
     commands: List<String>,
     initialMatrix: Map<Int, SortedSet<Int>>
-  ): List<Pair<Int, Int>> =
+  ): List<Intersection> =
     traverse(commands, Sweeper(initialMatrix))
 
   fun execute(data: List<String>): Int {

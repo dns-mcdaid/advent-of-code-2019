@@ -60,8 +60,8 @@ class Day03Test {
     @Test
     fun `Shortest Manhattan is determined from list of intersections`() {
       val crossovers = listOf(
-        6 to 6,
-        3 to 3
+        Intersection(6, 6),
+        Intersection(3, 3)
       )
 
       assertThat(Day03.shortestManhattan(crossovers)).isEqualTo(6)
