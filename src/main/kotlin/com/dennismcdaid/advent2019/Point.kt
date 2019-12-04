@@ -1,6 +1,6 @@
 package com.dennismcdaid.advent2019
 
-import kotlin.math.absoluteValue
+import kotlin.math.abs
 
 data class Point(
   val x: Int,
@@ -13,8 +13,8 @@ data class Point(
   fun rightBy(by: Int = 1) = Point(x + by, y)
 
   fun distanceTo(other: Point) : Int {
-    val xDist = (x - other.x).absoluteValue
-    val yDist = (y - other.y).absoluteValue
+    val xDist = abs(x - other.x)
+    val yDist = abs(y - other.y)
 
     return xDist + yDist
   }
