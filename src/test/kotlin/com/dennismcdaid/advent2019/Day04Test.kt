@@ -60,4 +60,25 @@ class Day04Test {
       assertThat(Day04.getPossiblePasswordCount(inputStart, inputEnd)).isEqualTo(1790)
     }
   }
+
+  @Nested
+  @DisplayName("Part 2")
+  inner class Part2 {
+    @Test
+    fun `Valid input passes narrower search`() {
+      assertThat(Day04.hasAtLeastOneGroupOfTwo(listOf(1,1,2,2,3,3))).isEqualTo(true)
+    }
+
+    @Test
+    fun `Longer sequence fails`() {
+      assertThat(Day04.hasAtLeastOneGroupOfTwo(listOf(1,2,3,4,4,4))).isEqualTo(false)
+    }
+
+    @Test
+    fun `Part 2 generates expected result`() {
+      assertThat(Day04.getNarrowerPasswordCount(inputStart, inputEnd)).isEqualTo(1206)
+    }
+  }
+
+
 }

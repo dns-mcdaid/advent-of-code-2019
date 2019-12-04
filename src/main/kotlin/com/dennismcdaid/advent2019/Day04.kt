@@ -19,6 +19,18 @@ object Day04 {
     return validSize && isSorted && containsADuplicate
   }
 
+  private fun narrowerMatch(digits: List<Int>) : Boolean {
+    return matches(digits) && hasAtLeastOneGroupOfTwo(digits)
+  }
+
+  fun hasAtLeastOneGroupOfTwo(digits: List<Int>) : Boolean = digits.mapIndexed { index, i ->
+    val previous = digits.getOrNull(index - 1)
+    val next = digits.getOrNull(index + 1)
+    val nextNext = digits.getOrNull(index + 2)
+    return@mapIndexed i == next && i != nextNext && i != previous
+  }
+    .any { it }
+
   fun matches(number: Int) : Boolean = matches(toDigits(number))
 
   fun toDigits(
@@ -37,11 +49,16 @@ object Day04 {
   // TODO: This can be heavily optimized.
   //  Whole ranges of numbers can be skipped by evaluating the result of toDigits
   //  and upping ints which are smaller than their left neighbors.
-  private fun findMatchesInRange(start: Int, end: Int) : List<Int> {
+  private fun findMatchesInRange(start: Int, end: Int, searchFilter: (List<Int>) -> Boolean) : List<Int> {
     return (start..end).toList()
-      .filter(this::matches)
+      .filter {
+        searchFilter(toDigits(it))
+      }
   }
 
   fun getPossiblePasswordCount(start: Int, end: Int) : Int =
-    findMatchesInRange(start, end).size
+    findMatchesInRange(start, end, this::matches).size
+
+  fun getNarrowerPasswordCount(start: Int, end: Int) : Int =
+    findMatchesInRange(start, end, this::narrowerMatch).size
 }
