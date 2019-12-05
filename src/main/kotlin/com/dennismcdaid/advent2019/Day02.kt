@@ -2,12 +2,6 @@ package com.dennismcdaid.advent2019
 
 object Day02 {
 
-  fun massageData(input: String): IntArray =
-    input.trim()
-      .split(",")
-      .map { it.toInt() }
-      .toIntArray()
-
   fun manipulateData(array: IntArray) : IntArray {
     return array.apply {
       this[1] = 12

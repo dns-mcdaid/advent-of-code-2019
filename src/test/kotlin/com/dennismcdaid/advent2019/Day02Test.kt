@@ -8,7 +8,7 @@ import org.junit.jupiter.api.assertThrows
 @DisplayName("Day 02")
 class Day02Test {
 
-  private val input = Parser.read("day02_input.txt")
+  private val input = Parser.readInts("day02_input.txt")
 
   private val smallestTestData = intArrayOf(1, 0, 0, 0, 99)
   private val testData = listOf(
@@ -18,11 +18,6 @@ class Day02Test {
     intArrayOf(2, 4, 4, 5, 99, 0) to intArrayOf(2, 4, 4, 5, 99, 9801),
     intArrayOf(1, 1, 1, 4, 99, 5, 6, 0, 99) to intArrayOf(30, 1, 1, 4, 2, 5, 6, 0, 99)
   )
-
-  @Test
-  fun `Conversion works`() {
-    assertThat(Day02.massageData(input)).isInstanceOf(IntArray::class.java)
-  }
 
   @Test
   fun `Mutation halts on 99`() {
@@ -46,8 +41,7 @@ class Day02Test {
 
   @Test
   fun `Generates expected solution for Part 1`() {
-    val brokenFirstRegister = Day02.massageData(input)
-      .let(Day02::manipulateData)
+    val brokenFirstRegister = Day02.manipulateData(input)
       .let(Day02::firstRegisterAfterMutation)
 
     assertThat(brokenFirstRegister).isEqualTo(5534943)
@@ -55,7 +49,6 @@ class Day02Test {
 
   @Test
   fun `Noun and verb mutation is determined successfully`() {
-    val massaged = Day02.massageData(input)
-    assertThat(Day02.getNounVerbMutated(massaged, 19690720)).isEqualTo(7603)
+    assertThat(Day02.getNounVerbMutated(input, 19690720)).isEqualTo(7603)
   }
 }

@@ -12,5 +12,11 @@ object Parser {
 
   fun readLines(fileName: String): List<String> = getFile(fileName).readLines()
 
-  fun read(fileName: String): String = getFile(fileName).readText()
+  fun read(fileName: String): String = getFile(fileName).readText().trim()
+
+  fun readInts(fileName: String): IntArray = read(fileName)
+    .split(",")
+    .map(String::toInt)
+    .toIntArray()
+
 }
