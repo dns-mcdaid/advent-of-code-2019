@@ -49,16 +49,39 @@ object Day04 {
   // TODO: This can be heavily optimized.
   //  Whole ranges of numbers can be skipped by evaluating the result of toDigits
   //  and upping ints which are smaller than their left neighbors.
+  @Deprecated("Use optimized version")
   private fun findMatchesInRange(start: Int, end: Int, searchFilter: (List<Int>) -> Boolean) : List<Int> {
+    var passes = 0
     return (start..end).toList()
       .filter {
+        passes++
         searchFilter(toDigits(it))
       }
+      .also {
+        println("$passes passes took place")
+      }
+  }
+
+  private fun findMatches(start: Int, end: Int, searchFilter: (List<Int>) -> Boolean) : Int {
+    var passes = 0
+    var matchCount = 0
+    return generateSequence(start, { num ->
+      val digits = toDigits(num)
+      val incremented = digits.mapIndexed { index, i ->
+        return@mapIndexed if (index == 0) i
+        else i.coerceAtLeast(digits[index-1])
+      }
+      if (searchFilter(incremented)) matchCount++
+      passes++
+      return@generateSequence (toNumber(incremented) + 1).takeIf { it <= end }
+    }).toList()
+      .let { matchCount }
+      .also { println("$passes passes took place") }
   }
 
   fun getPossiblePasswordCount(start: Int, end: Int) : Int =
     findMatchesInRange(start, end, this::matches).size
 
   fun getNarrowerPasswordCount(start: Int, end: Int) : Int =
-    findMatchesInRange(start, end, this::narrowerMatch).size
+    findMatches(start, end, this::narrowerMatch)
 }
