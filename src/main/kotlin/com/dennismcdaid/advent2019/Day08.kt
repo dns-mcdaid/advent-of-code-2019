@@ -30,7 +30,7 @@ object Day08 {
   fun findLayerWithFewestZeros(image: List<List<List<Int>>>) : Map<Int, Int> {
     return image.map { layer ->
       layer.flatten().groupingBy { it }.eachCount()
-    }.maxBy { numberMap ->
+    }.minBy { numberMap ->
       numberMap[0] ?: 0
     } ?: throw IllegalStateException("None of them have zero")
   }
