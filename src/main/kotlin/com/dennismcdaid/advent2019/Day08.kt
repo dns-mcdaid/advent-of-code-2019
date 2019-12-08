@@ -47,11 +47,39 @@ object Day08 {
     return image
   }
 
-  fun execute(input: IntArray, width: Int, height: Int) : Int {
+  fun getCalculationFromZeroLayer(input: IntArray, width: Int, height: Int) : Int {
     return buildImage(input, width, height)
       .let(this::findLayerWithFewestZeros)
       .let {
         (it[1] ?: 0) * (it[2] ?: 0)
       }
+  }
+
+  fun mergeLayers(image: List<List<List<Int>>>, width: Int, height: Int) : List<List<Int>> {
+    val layers = image.map { layer ->
+      layer.flatten()
+    }
+    val container = (0 until width * height).map { i ->
+      layers.asSequence().firstOrNull { it[i] != 2 }?.get(i) ?: 2
+    }.toIntArray()
+
+    val condensedImage = mutableListOf<List<Int>>()
+
+    for (i in container.indices step width) {
+      condensedImage.add(container.copyOfRange(i, i + width).toList())
+    }
+
+    return condensedImage
+  }
+
+  fun makePrintable(image: List<List<Int>>) : List<String> {
+    return image.map { row ->
+      row.joinToString(separator = " ") {
+        return@joinToString when (it) {
+          1 -> "X"
+          else -> " "
+        }
+      }
+    }
   }
 }
