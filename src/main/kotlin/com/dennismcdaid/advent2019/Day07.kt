@@ -1,43 +1,45 @@
 package com.dennismcdaid.advent2019
 
-class Amplifier(private val memory: IntArray, private val phaseSetting: Int) {
-
-  var pointer = 0
-  private var phaseSettingUsed = false
-  var lastOutput: Int = 0
-
-  fun runUntilOutput(input: Int) : BreakCommand {
-    while (memory[pointer] != 99) {
-      val nextCommand = Day05.generateInstruction(
-        memory[pointer],
-        if (!phaseSettingUsed) (phaseSetting).also {
-          phaseSettingUsed = true
-        } else input
-      )
-      val newPointer = nextCommand.execute(memory, pointer)
-      if (nextCommand is Day05.Instruction.Output)
-        return BreakCommand.Output(nextCommand.getOutput(memory, pointer)).also {
-          lastOutput = it.output
-          pointer = newPointer
-        }
-      pointer = newPointer
-    }
-    return BreakCommand.Complete(lastOutput)
-  }
-}
-
-sealed class BreakCommand {
-  abstract val output: Int
-  data class Output(override val output: Int) : BreakCommand()
-  data class Complete(override val output: Int) : BreakCommand()
-}
+import com.dennismcdaid.advent2019.intcode.Instruction
 
 object Day07 {
 
-  private fun generateWithInput(command: Int, inputs: Iterator<Int>) : Day05.Instruction {
+  sealed class BreakCommand {
+    abstract val output: Int
+    data class Output(override val output: Int) : BreakCommand()
+    data class Complete(override val output: Int) : BreakCommand()
+  }
+
+  class Amplifier(private val memory: IntArray, private val phaseSetting: Int) {
+
+    private var pointer = 0
+    private var phaseSettingUsed = false
+    private var lastOutput: Int = 0
+
+    fun runUntilOutput(input: Int) : BreakCommand {
+      while (memory[pointer] != 99) {
+        val nextCommand = Instruction.from(
+          memory[pointer],
+          if (!phaseSettingUsed) (phaseSetting).also {
+            phaseSettingUsed = true
+          } else input
+        )
+        val newPointer = nextCommand.execute(memory, pointer)
+        if (nextCommand is Instruction.Output)
+          return BreakCommand.Output(nextCommand.getOutput(memory, pointer)).also {
+            lastOutput = it.output
+            pointer = newPointer
+          }
+        pointer = newPointer
+      }
+      return BreakCommand.Complete(lastOutput)
+    }
+  }
+
+  private fun generateWithInput(command: Int, inputs: Iterator<Int>) : Instruction {
     return when (command % 100) {
-      3 -> Day05.generateInstruction(command, inputs.next())
-      else -> Day05.generateInstruction(command)
+      3 -> Instruction.from(command, inputs.next())
+      else -> Instruction.from(command)
     }
   }
 
@@ -59,7 +61,7 @@ object Day07 {
     do {
       currentIndex = generateWithInput(intArray[currentIndex], iterableInput)
         .also {
-          (it as? Day05.Instruction.Output)?.getOutput(intArray, currentIndex)?.let(outputs::add)
+          (it as? Instruction.Output)?.getOutput(intArray, currentIndex)?.let(outputs::add)
         }
         .execute(intArray, currentIndex)
     } while (intArray[currentIndex] != 99)
