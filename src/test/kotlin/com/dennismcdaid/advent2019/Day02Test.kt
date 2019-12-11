@@ -20,22 +20,9 @@ class Day02Test {
   )
 
   @Test
-  fun `Mutation halts on 99`() {
-    assertThat(Day02.mutateUntilHalt(smallestTestData)).isInstanceOf(IntArray::class.java)
-  }
-
-  @Test
-  fun `Throws exception when no 99 is present`() {
-    val badInput = intArrayOf(1, 2, 3, 1)
-    assertThrows<UnsupportedOperationException> {
-      Day02.mutateUntilHalt(badInput)
-    }
-  }
-
-  @Test
   fun `Mutates test data to expected output`() {
     testData.forEach { (array, expected) ->
-      assertThat(Day02.mutateUntilHalt(array)).isEqualTo(expected)
+      assertThat(Day02.firstRegisterAfterMutation(array)).isEqualTo(expected[0])
     }
   }
 
