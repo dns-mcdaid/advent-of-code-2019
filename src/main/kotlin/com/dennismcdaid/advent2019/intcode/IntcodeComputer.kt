@@ -17,7 +17,7 @@ class IntcodeComputer(private val memory: IntArray) {
     return memory[index]
   }
 
-  fun run(thenReturn: (IntcodeComputer) -> Int) = runBlocking {
+  fun runThen(thenReturn: (IntcodeComputer) -> Int) = runBlocking {
     var pass = 0
     while (memory[pointer] != 99) {
       val instruction = Instruction.from(memory[pointer])
