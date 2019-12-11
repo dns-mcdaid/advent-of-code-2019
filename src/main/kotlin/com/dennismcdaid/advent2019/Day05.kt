@@ -6,7 +6,7 @@ object Day05 {
   fun execute(intArray: IntArray, input: Int): Int =
     IntcodeComputer(intArray)
       .apply { addInput(input) }
-      .runThen {
+      .runThenGet {
         it.output.last()
       }
 }

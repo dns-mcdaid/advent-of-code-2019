@@ -3,7 +3,6 @@ package com.dennismcdaid.advent2019
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 @DisplayName("Day 02")
 class Day02Test {

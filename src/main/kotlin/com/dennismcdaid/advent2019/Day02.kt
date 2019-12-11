@@ -12,7 +12,7 @@ object Day02 {
   }
 
   fun firstRegisterAfterMutation(array: IntArray) : Int =
-    IntcodeComputer(array).runThen { it[0] }
+    IntcodeComputer(array).runThenGet { it[0] }
 
   fun getNounVerbMutated(source: IntArray, searchValue: Int) : Int {
     val (noun, verb) = determineNounAndVerb(source, searchValue)

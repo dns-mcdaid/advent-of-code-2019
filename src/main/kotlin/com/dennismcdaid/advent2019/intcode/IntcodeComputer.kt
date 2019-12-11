@@ -1,6 +1,5 @@
 package com.dennismcdaid.advent2019.intcode
 
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class IntcodeComputer(private val memory: IntArray) {
@@ -17,7 +16,10 @@ class IntcodeComputer(private val memory: IntArray) {
     return memory[index]
   }
 
-  fun runThen(thenReturn: (IntcodeComputer) -> Int) = runBlocking {
+  val current : Int
+    get() = memory[pointer]
+
+  fun runThenGet(thenReturn: (IntcodeComputer) -> Int): Int {
     var pass = 0
     while (memory[pointer] != 99) {
       val instruction = Instruction.from(memory[pointer])
@@ -25,7 +27,18 @@ class IntcodeComputer(private val memory: IntArray) {
       increment(instruction)
       pass++
     }
-    thenReturn(this@IntcodeComputer)
+    return thenReturn(this@IntcodeComputer)
+  }
+
+  fun runUntil(condition: (IntcodeComputer) -> Boolean) : IntcodeComputer {
+    var pass = 0
+    while(!condition(this)) {
+      val instruction = Instruction.from(memory[pointer])
+      execute(instruction)
+      increment(instruction)
+      pass++
+    }
+    return this
   }
 
   private fun execute(instruction: Instruction) {
