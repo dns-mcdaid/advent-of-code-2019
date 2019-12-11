@@ -1,6 +1,6 @@
 package com.dennismcdaid.advent2019.intcode
 
-enum class Operation(private val opcode: Int, val size: Int) {
+enum class Operation(private val opcode: Long, val size: Int) {
   ADDITION(1, 4),
   MULTIPLICATION(2, 4),
   SAVE(3, 2),
@@ -13,6 +13,6 @@ enum class Operation(private val opcode: Int, val size: Int) {
   HALT_AND_CATCH_FIRE(99, 0);
 
   companion object {
-    fun from(opcode: Int) = values().first { it.opcode == opcode }
+    fun from(opcode: Long) = values().first { it.opcode == opcode }
   }
 }

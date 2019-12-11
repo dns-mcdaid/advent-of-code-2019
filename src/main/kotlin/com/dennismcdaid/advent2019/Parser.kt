@@ -19,4 +19,9 @@ object Parser {
     .map(String::toInt)
     .toIntArray()
 
+  fun readLongs(fileName: String): LongArray = read(fileName)
+    .split(",")
+    .map(String::toLong)
+    .toLongArray()
+
 }

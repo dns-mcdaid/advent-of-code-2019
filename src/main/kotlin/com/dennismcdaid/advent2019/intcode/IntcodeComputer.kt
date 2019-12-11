@@ -2,26 +2,26 @@ package com.dennismcdaid.advent2019.intcode
 
 import java.util.*
 
-class IntcodeComputer(private val memory: IntArray) {
+class IntcodeComputer(private val memory: LongArray) {
   var pointer = 0
   var relativePointer = 0
-  val output = mutableListOf<Int>()
-  private val inputQueue = ArrayDeque<Int>()
+  val output = mutableListOf<Long>()
+  private val inputQueue = ArrayDeque<Long>()
 
-  fun addInput(input: Int) {
+  fun addInput(input: Long) {
     inputQueue.add(input)
   }
 
-  operator fun get(index: Int) : Int {
+  operator fun get(index: Int) : Long {
     return memory[index]
   }
 
-  val current : Int
+  val current : Long
     get() = memory[pointer]
 
-  fun runThenGet(thenReturn: (IntcodeComputer) -> Int): Int {
+  fun runThenGet(thenReturn: (IntcodeComputer) -> Long): Long {
     var pass = 0
-    while (memory[pointer] != 99) {
+    while (memory[pointer] != 99L) {
       val instruction = Instruction.from(memory[pointer])
       execute(instruction)
       increment(instruction)
@@ -60,13 +60,13 @@ class IntcodeComputer(private val memory: IntArray) {
         writeToThirdRegister(if (a == b) 1 else 0)
       }
       Operation.SAVE -> {
-        memory[memory[pointer + 1]] = inputQueue.pop()
+        memory[memory[pointer + 1].toInt()] = inputQueue.pop()
       }
       Operation.OUTPUT -> {
         output.add(getValueForMode(instruction.modes.first(), pointer + 1))
       }
       Operation.ADJUST_RELATIVE -> {
-        relativePointer += getValueForMode(instruction.modes.first(), pointer + 1)
+        relativePointer += getValueForMode(instruction.modes.first(), pointer + 1).toInt()
       }
       Operation.JUMP_IF_TRUE,
       Operation.JUMP_IF_FALSE,
@@ -80,18 +80,18 @@ class IntcodeComputer(private val memory: IntArray) {
     pointer = when (instruction.operation) {
       Operation.JUMP_IF_TRUE -> {
         val (toCheck, potentialNewIndex) = getValuesForModes(instruction.modes)
-        if (toCheck != 0) potentialNewIndex else pointer + Operation.JUMP_IF_TRUE.size
+        if (toCheck != 0L) potentialNewIndex.toInt() else pointer + Operation.JUMP_IF_TRUE.size
       }
       Operation.JUMP_IF_FALSE -> {
         val (toCheck, potentialNewIndex) = getValuesForModes(instruction.modes)
-        if (toCheck == 0) potentialNewIndex else pointer + Operation.JUMP_IF_TRUE.size
+        if (toCheck == 0L) potentialNewIndex.toInt() else pointer + Operation.JUMP_IF_TRUE.size
       }
       else -> pointer + instruction.operation.size
     }
   }
 
-  private fun writeToThirdRegister(newValue: Int) {
-    val writeIndex = memory[pointer + 3]
+  private fun writeToThirdRegister(newValue: Long) {
+    val writeIndex = memory[pointer + 3].toInt()
     memory[writeIndex] = newValue
   }
 
@@ -99,12 +99,12 @@ class IntcodeComputer(private val memory: IntArray) {
     getValueForMode(i, pointer + index + 1)
   }
 
-  private fun getValueForMode(mode: Mode, index: Int) : Int {
+  private fun getValueForMode(mode: Mode, index: Int) : Long {
     val item = memory[index]
     return when (mode) {
-      Mode.POSITION -> memory[item]
+      Mode.POSITION -> memory[item.toInt()]
       Mode.IMMEDIATE -> item
-      Mode.RELATIVE -> memory[item + relativePointer]
+      Mode.RELATIVE -> memory[item.toInt() + relativePointer]
     }
   }
 }

@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test
 @DisplayName("Day 02")
 class Day02Test {
 
-  private val input = Parser.readInts("day02_input.txt")
+  private val input = Parser.readLongs("day02_input.txt")
 
-  private val smallestTestData = intArrayOf(1, 0, 0, 0, 99)
+  private val smallestTestData = longArrayOf(1, 0, 0, 0, 99)
   private val testData = listOf(
-    intArrayOf(1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50) to intArrayOf(3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50),
-    intArrayOf(1, 0, 0, 0, 99) to intArrayOf(2, 0, 0, 0, 99),
-    intArrayOf(2, 3, 0, 3, 99) to intArrayOf(2, 3, 0, 6, 99),
-    intArrayOf(2, 4, 4, 5, 99, 0) to intArrayOf(2, 4, 4, 5, 99, 9801),
-    intArrayOf(1, 1, 1, 4, 99, 5, 6, 0, 99) to intArrayOf(30, 1, 1, 4, 2, 5, 6, 0, 99)
+    longArrayOf(1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50) to longArrayOf(3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50),
+    longArrayOf(1, 0, 0, 0, 99) to longArrayOf(2, 0, 0, 0, 99),
+    longArrayOf(2, 3, 0, 3, 99) to longArrayOf(2, 3, 0, 6, 99),
+    longArrayOf(2, 4, 4, 5, 99, 0) to longArrayOf(2, 4, 4, 5, 99, 9801),
+    longArrayOf(1, 1, 1, 4, 99, 5, 6, 0, 99) to longArrayOf(30, 1, 1, 4, 2, 5, 6, 0, 99)
   )
 
   @Test

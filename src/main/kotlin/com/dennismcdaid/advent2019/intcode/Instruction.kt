@@ -3,7 +3,7 @@ package com.dennismcdaid.advent2019.intcode
 data class Instruction(val operation: Operation, val modes: List<Mode>) {
 
   companion object {
-    fun from(command: Int): Instruction {
+    fun from(command: Long): Instruction {
       val opcode = command % 100
       val modes = (command / 100)
         .toString()
