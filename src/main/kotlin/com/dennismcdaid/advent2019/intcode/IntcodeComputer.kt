@@ -3,7 +3,8 @@ package com.dennismcdaid.advent2019.intcode
 import java.util.*
 
 class IntcodeComputer(rawMemory: LongArray) {
-  private val maxSize = rawMemory.max()?.toInt()?.coerceAtLeast(rawMemory.size) ?: rawMemory.size
+  private val maxSize = rawMemory.size.coerceAtLeast(100000)
+
   private val memory = LongArray(maxSize).apply {
     rawMemory.copyInto(this)
   }

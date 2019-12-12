@@ -12,7 +12,7 @@ object Day10 {
       .map { it.first }
   }
 
-  fun findBestPossibleLocation(points: List<Point>) : Pair<Point, Int> {
+  private fun findBestPossibleLocation(points: List<Point>) : Pair<Point, Int> {
     return points.map { candidate ->
       val othersItCanSee = points.filter { it != candidate }.map {
         candidate.angle(it)
@@ -25,6 +25,19 @@ object Day10 {
   fun findMostConnections(input: List<String>) : Int {
     return massageData(input)
       .let(this::findBestPossibleLocation).second
+  }
+
+  fun find200thVaporized(input: List<String>) {
+    val asteroids = massageData(input)
+    val outpost = findBestPossibleLocation(asteroids).first
+    vaporizedOrder(outpost, asteroids)
+  }
+
+  fun vaporizedOrder(outpost: Point, asteroids: List<Point>) {
+    val thetas = asteroids.filter { it != outpost }.map {
+      outpost.angle(it)
+    }
+    println(thetas)
   }
 
 

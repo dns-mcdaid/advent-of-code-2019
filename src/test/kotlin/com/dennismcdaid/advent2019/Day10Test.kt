@@ -14,14 +14,14 @@ class Day10Test {
   @DisplayName("Part 1")
   inner class Part1 {
 
-    val example1 =
+    private val example1 =
       ".#..#\n" +
           ".....\n" +
           "#####\n" +
           "....#\n" +
           "...##"
 
-    val example2 =
+    private val example2 =
       "......#.#.\n" +
           "#..#.#....\n" +
           "..#######.\n" +
@@ -33,7 +33,7 @@ class Day10Test {
           "##...#..#.\n" +
           ".#....####"
 
-    val example3 =
+    private val example3 =
       "#.#...#.#.\n" +
           ".###....#.\n" +
           ".#....#...\n" +
@@ -45,7 +45,7 @@ class Day10Test {
           "......#...\n" +
           ".####.###."
 
-    val example4 =
+    private val example4 =
       ".#..#..###\n" +
           "####.###.#\n" +
           "....###.#.\n" +
@@ -57,7 +57,7 @@ class Day10Test {
           ".##...##.#\n" +
           ".....#.#.."
 
-    val example5 =
+    private val example5 =
       ".#..##.###...#######\n" +
           "##.############..##.\n" +
           ".#.######.########.#\n" +
@@ -106,5 +106,10 @@ class Day10Test {
     fun `Input generates acceptable output`() {
       assertThat(Day10.findMostConnections(input)).isEqualTo(230)
     }
+  }
+
+  @Test
+  fun `Part 2 Thing`() {
+    Day10.find200thVaporized(input)
   }
 }

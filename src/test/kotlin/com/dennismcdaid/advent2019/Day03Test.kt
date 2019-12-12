@@ -41,11 +41,11 @@ class Day03Test {
     @Test
     fun `Strings map to directions`() {
       val expected = listOf(
-        Direction.RIGHT, Direction.DOWN, Direction.RIGHT, Direction.UP,
-        Direction.LEFT, Direction.DOWN, Direction.RIGHT, Direction.UP, Direction.LEFT
+        Direction.EAST, Direction.SOUTH, Direction.EAST, Direction.NORTH,
+        Direction.WEST, Direction.SOUTH, Direction.EAST, Direction.NORTH, Direction.WEST
       )
 
-      val firstLineDirections = Day03.massageData(example1)[0].map { Direction.from(it[0]) }
+      val firstLineDirections = Day03.massageData(example1)[0].map { Day03.directionFrom(it[0]) }
 
       assertThat(firstLineDirections).isEqualTo(expected)
     }
@@ -53,7 +53,7 @@ class Day03Test {
     @Test
     fun `Command is parsed with steps`() {
       val example = "U35"
-      val expected = Pair(Direction.UP, 35)
+      val expected = Pair(Direction.NORTH, 35)
       assertThat(Day03.parseCommand(example)).isEqualTo(expected)
     }
 

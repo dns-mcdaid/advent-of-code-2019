@@ -2,19 +2,6 @@ package com.dennismcdaid.advent2019
 
 import java.util.*
 
-enum class Direction(val rawValue: Char) {
-  UP('U'),
-  DOWN('D'),
-  LEFT('L'),
-  RIGHT('R');
-
-  companion object {
-    fun from(char: Char): Direction {
-      return values().first { it.rawValue == char }
-    }
-  }
-}
-
 interface Collector {
   var stepCounter: Int
   fun collect(
@@ -32,14 +19,7 @@ private data class Intersection(
   val y = point.y
 
   fun jump(direction: Direction, steps: Int): Intersection {
-    val newPoint = when (direction) {
-      Direction.UP -> point.upBy(steps)
-      Direction.DOWN -> point.downBy(steps)
-      Direction.LEFT -> point.leftBy(steps)
-      Direction.RIGHT -> point.rightBy(steps)
-    }
-
-    return Intersection(newPoint, step + steps)
+    return Intersection(point.adjacent(direction), step + steps)
   }
 
   override fun compareTo(other: Intersection): Int {
@@ -95,7 +75,7 @@ object Day03 {
     input.map { it.split(",") }
 
   fun parseCommand(command: String): Pair<Direction, Int> {
-    val direction = Direction.from(command[0])
+    val direction = directionFrom(command[0])
     val steps = command.substring(1).toInt()
     return Pair(direction, steps)
   }
@@ -144,5 +124,15 @@ object Day03 {
       .filter { it != 0 }
       .min()
       ?: throw IllegalStateException("No intersections found!")
+  }
+
+  fun directionFrom(char: Char) : Direction {
+    return when (char) {
+      'U' -> Direction.NORTH
+      'D' -> Direction.SOUTH
+      'L' -> Direction.WEST
+      'R' -> Direction.EAST
+      else -> throw IllegalArgumentException("Invalid direction: $char")
+    }
   }
 }

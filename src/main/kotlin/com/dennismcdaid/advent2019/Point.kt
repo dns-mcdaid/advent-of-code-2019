@@ -26,7 +26,23 @@ data class Point(
     return atan2(x.toDouble(), y.toDouble())
   }
 
+  fun adjacent(direction: Direction) : Point {
+    return when (direction) {
+      Direction.NORTH -> upBy()
+      Direction.EAST -> rightBy()
+      Direction.SOUTH -> downBy()
+      Direction.WEST -> leftBy()
+    }
+  }
+
   companion object {
     val CENTER = Point(0, 0)
   }
+}
+
+enum class Direction {
+  NORTH,
+  EAST,
+  SOUTH,
+  WEST;
 }
