@@ -25,27 +25,26 @@ class Day11Test {
         1L to 0L,
         1L to 0L
       )
-      val runner = Day11()
 
-      commands.forEach { (color, direction) ->
-        runner.colorMap[runner.robot.location] = color
-        runner.robot.turn(direction)
+      val robot = Day11.Robot()
+
+      commands.forEach { (_, direction) ->
+        robot.turn(direction)
       }
 
-      assertThat(runner.robot.location).isEqualTo(Point(0, 1))
-      assertThat(runner.robot.direction).isEqualTo(Direction.WEST)
-      assertThat(runner.colorMap.size).isEqualTo(6)
+      assertThat(robot.location).isEqualTo(Point(0, 1))
+      assertThat(robot.direction).isEqualTo(Direction.WEST)
     }
 
     @Test
     fun `Part 1 generates acceptable answer`() {
-      assertThat(Day11().collectColoredTiles(input).size).isEqualTo(2219)
+      assertThat(Day11.collectColoredTiles(input).size).isEqualTo(2219)
     }
   }
 
   @Test
   fun `Part 2 prints acceptable result`() {
-    val colorMap = Day11().collectColoredTiles(input, initial = 1)
-    Day11().printOutput(colorMap)
+    val colorMap = Day11.collectColoredTiles(input, initial = 1)
+    Day11.printOutput(colorMap)
   }
 }

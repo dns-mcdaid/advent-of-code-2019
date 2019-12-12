@@ -2,7 +2,7 @@ package com.dennismcdaid.advent2019
 
 import com.dennismcdaid.advent2019.intcode.IntcodeComputer
 
-class Day11 {
+object Day11 {
 
   class Robot {
     var direction = Direction.NORTH
@@ -29,10 +29,9 @@ class Day11 {
     }
   }
 
-  val colorMap = mutableMapOf<Point, Long>()
-  val robot = Robot()
-
   fun collectColoredTiles(memory: LongArray, initial: Long = 0): Map<Point, Long> {
+    val colorMap = mutableMapOf<Point, Long>()
+    val robot = Robot()
     val machine = IntcodeComputer(memory)
       .apply { addInput(initial) }
     var cycle = 0
