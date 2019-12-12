@@ -1,7 +1,6 @@
 package com.dennismcdaid.advent2019
 
 import java.util.*
-import kotlin.math.absoluteValue
 
 enum class Direction(val rawValue: Char) {
   UP('U'),
@@ -131,7 +130,7 @@ object Day03 {
     traverse(commands, Sweeper(initialMatrix))
 
   fun execute01(data: List<String>): Int = execute(data) {
-    it.point.distanceTo(Point.CENTER)
+    it.point.manhattanTo(Point.CENTER)
   }
 
   fun execute02(data: List<String>): Int = execute(data, Intersection::step)
